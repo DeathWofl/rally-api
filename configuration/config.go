@@ -7,16 +7,16 @@ import (
 )
 
 //GetConfiguration obtiene los datos para acceso a la BD
-func GetConfiguration() {
+func GetConfiguration() Configuration {
 
 	var c Configuration
 
-	file, err := os.File("./config.json")
+	file, err := os.Open("./config.json")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err := json.Encode(File).Decode(&c)
+	err = json.NewDecoder(file).Decode(&c)
 	if err != nil {
 		log.Fatal(err)
 	}

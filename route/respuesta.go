@@ -9,12 +9,12 @@ import (
 )
 
 //GetRespuesta retorna especificamente una respuesta
-func GetRespuesta(c echo.Context) {
+func GetRespuesta(c echo.Context) error {
 
 	DB := db.DBManager()
 
 	id := c.Param("id")
-	Resp := models.Respuesta
+	Resp := models.Respuesta{}
 	DB.Find(&Resp, id)
 	return c.JSON(http.StatusOK, Resp)
 }

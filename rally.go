@@ -7,7 +7,7 @@ import (
 	"github.com/DeathWofl/rally-api/db"
 	"github.com/DeathWofl/rally-api/migration"
 	"github.com/labstack/echo"
-	"golang.org/x/net/route"
+	"github.com/DeathWofl/rally-api/route"
 )
 
 func main() {

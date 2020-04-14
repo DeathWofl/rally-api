@@ -6,6 +6,8 @@ import (
 
 	"github.com/DeathWofl/rally-api/db"
 	"github.com/DeathWofl/rally-api/migration"
+	"github.com/labstack/echo"
+	"golang.org/x/net/route"
 )
 
 func main() {
@@ -23,5 +25,9 @@ func main() {
 		fmt.Println("Termino la Migracion...")
 	}
 
-	// fmt.Println("Rally API")
+	e := echo.New()
+
+	e.GET("/respuesta", route.GetRespuesta)
+
+	e.Logger.Fatal(e.Start(":1323"))
 }

@@ -4,6 +4,6 @@ import "github.com/jinzhu/gorm"
 
 //Estacion tabla de estaciones del rally
 type Estacion struct {
-	*gorm.Model
+	gorm.Model
 	Nombre string `json:"nombre" gorm:"not null;type:varchar(20)"`
 }

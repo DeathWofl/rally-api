@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/DeathWofl/rally-api/db"
-	"github.com/DeathWofl/rally-api/migration.go"
+	"github.com/DeathWofl/rally-api/migration"
 )
 
 func main() {
@@ -22,4 +22,6 @@ func main() {
 		migration.Migrate()
 		fmt.Println("Termino la Migracion...")
 	}
+
+	// fmt.Println("Rally API")
 }

@@ -8,37 +8,38 @@ import (
 //Migrate migracion a la base de datos
 func Migrate() {
 
-	db := db.DBManager
+	DB := db.Init()
 
-	db.LogMode(true)
+	DB.LogMode(true)
 
 	//Equipos
-	db.DropTableIfExists(&models.Equipo{})
-	db.CreateTable(&models.Equipo{})
+	DB.DropTableIfExists(&models.Equipo{})
+	DB.CreateTable(&models.Equipo{})
 
-	//Estaciones
-	db.DropTableIfExists(&models.Estacion{})
-	db.CreateTable(&models.Estacion{})
+	// Estaciones
+	DB.DropTableIfExists(&models.Estacion{})
+	DB.CreateTable(&models.Estacion{})
 
-	//Respuestas
-	db.DropTableIfExists(&models.Respuesta{})
-	db.CreateTable(&models.Respuesta{})
+	// Respuestas
+	DB.DropTableIfExists(&models.Respuesta{})
+	DB.CreateTable(&models.Respuesta{})
 
-	//Preguntas
-	db.DropTableIfExists(&models.Pregunta{})
-	db.CreateTable(&models.Pregunta{})
-
-	//Registros de respuestas
-	db.DropTableIfExists(&models.RegResp{})
-	db.CreateTable(&models.RegResp{})
-
-	//Registros de Tiempos
-	db.DropTableIfExists(&models.RegTiempo{})
-	db.CreateTable(&models.RegTiempo{})
+	// Preguntas
+	DB.DropTableIfExists(&models.Pregunta{})
+	DB.CreateTable(&models.Pregunta{})
 
 	// Usuarios
-	db.DropTableIfExists(&models.Usuario{})
-	db.CreateTable(&models.Usuario{})
-	user := models.Usuario{Name: "Admin", Username: "admin", Password: "admin"}
-	db.Create(&user)
+	DB.DropTableIfExists(&models.Usuario{})
+	DB.CreateTable(&models.Usuario{})
+	user := models.Usuario{Nombre: "Admin", Username: "admin", Password: "admin"}
+	DB.Create(&user)
+
+	// Registros de respuestas
+	DB.DropTableIfExists(&models.RegResp{})
+	DB.CreateTable(&models.RegResp{})
+
+	// Registros de Tiempos
+	DB.DropTableIfExists(&models.RegTiempo{})
+	DB.CreateTable(&models.RegTiempo{})
+
 }

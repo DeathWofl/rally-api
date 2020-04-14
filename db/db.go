@@ -6,6 +6,7 @@ import (
 
 	"github.com/DeathWofl/rally-api/configuration"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
 
 //DB conexion en la BD

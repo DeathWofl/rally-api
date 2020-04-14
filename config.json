@@ -1,0 +1,7 @@
+{
+    "Server":"localhost",
+    "Port":"8019",
+    "User":"root",
+    "Database": "rallydb",
+    "Password":"DeathWolf02"
+}

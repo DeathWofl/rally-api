@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 //Equipo tabla de equipos del rally
 type Equipo struct {
-	*gorm.Model
+	gorm.Model
 	MatriculaE1 string `json:"MatriculaE1" gorm:"not null;type:varchar(15);"`
 	MatriculaE2 string `json:"MatriculaE2" gorm:"not null;type:varchar(15);"`
 	MatriculaE3 string `json:"MatriculaE3" gorm:"not null;type:varchar(15);"`

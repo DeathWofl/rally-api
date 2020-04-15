@@ -10,9 +10,7 @@ import (
 
 //GetRespuesta retorna especificamente una respuesta
 func GetRespuesta(c echo.Context) error {
-
-	DB := db.DBManager()
-
+	DB := db.Init()
 	id := c.Param("id")
 	Resp := models.Respuesta{}
 	DB.Find(&Resp, id)

@@ -28,7 +28,10 @@ func main() {
 	e := echo.New()
 
 	e.GET("/respuesta", route.GetRespuesta)
-	e.GET("/preguntas", route.getAllQuestion)
+	e.GET("/preguntas", route.GetAllQuestion)
+	e.GET("/usuarios", route.GetAllUsers)
+	e.POST("/usuarios", route.PostUser)
+	e.DELETE("/usuarios", route.DeleteUser)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

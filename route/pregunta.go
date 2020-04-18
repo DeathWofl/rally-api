@@ -10,7 +10,7 @@ import (
 
 func GetAllQuestion(c echo.Context) error {
 	DB := db.DBManager()
-	question := models.Pregunta{}
+	question := []models.Pregunta{}
 	DB.Find(&question)
 	return c.JSON(http.StatusOK, question)
 }
@@ -20,10 +20,6 @@ func GetQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := models.Pregunta{}
 	id := c.Param("id")
-	err := c.Bind(&question)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity)
-	}
 	DB.First(&question, id)
 	if question.ID == 0 {
 		return c.JSON(http.StatusNotFound, "Pregunta no existente")
@@ -42,15 +38,11 @@ func PostQuestion(c echo.Context) error {
 	return c.JSON(http.StatusOK, question)
 }
 
-// Delete user usuario
+// Delete question
 func DeleteQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := models.Pregunta{}
 	id := c.Param("id")
-	err := c.Bind(&question)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity)
-	}
 	DB.Delete(&question, id)
 	if question.ID == 0 {
 		return c.JSON(http.StatusNotFound, "No se ha podido eliminar la pregunta.")

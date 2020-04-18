@@ -39,13 +39,13 @@ func PutRespuesta(c echo.Context) error {
 	DB.Find(&Resp, ID)
 
 	//Datos de los campos a actualizar
-	PutUser := models.Respuesta{}
+	PutResp := models.Respuesta{}
 	if err := c.Bind(PutUser); err != nil {
 		panic(err)
 	}
 
 	//Actualizando Datos
-	DB.Model(&Resp).Updates(PutUser)
+	DB.Model(&Resp).Updates(PutResp)
 
 	return c.JSON(http.StatusOK, PutUser)
 }

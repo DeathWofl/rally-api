@@ -9,22 +9,26 @@ import (
 )
 
 func GetAllQuestion(c echo.Context) error {
-	DB := db.Init()
-	question := models.Pregunta{}
+	DB := db.DBManager()
+	question := []models.Pregunta{}
 	DB.Find(&question)
 	return c.JSON(http.StatusOK, question)
 }
 
+// Select one question
 func GetQuestion(c echo.Context) error {
-	DB := db.Init()
+	DB := db.DBManager()
 	question := models.Pregunta{}
 	id := c.Param("id")
-	DB.Find(&question, id)
+	DB.First(&question, id)
+	if question.ID == 0 {
+		return c.JSON(http.StatusNotFound, "Pregunta no existente")
+	}
 	return c.JSON(http.StatusOK, question)
 }
 
 func PostQuestion(c echo.Context) error {
-	DB := db.Init()
+	DB := db.DBManager()
 	question := models.Pregunta{}
 	err := c.Bind(&question)
 	if err != nil {
@@ -32,4 +36,16 @@ func PostQuestion(c echo.Context) error {
 	}
 	DB.Create(&question)
 	return c.JSON(http.StatusOK, question)
+}
+
+// Delete question
+func DeleteQuestion(c echo.Context) error {
+	DB := db.DBManager()
+	question := models.Pregunta{}
+	id := c.Param("id")
+	DB.Delete(&question, id)
+	if question.ID == 0 {
+		return c.JSON(http.StatusNotFound, "No se ha podido eliminar la pregunta.")
+	}
+	return c.String(http.StatusOK, "Pregunta eliminada")
 }

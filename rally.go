@@ -52,5 +52,18 @@ func main() {
 	// e.POST("/usuarios", route.PostUser)
 	// e.DELETE("/usuarios", route.DeleteUser)
 
+	// Users
+	e.GET("/usuarios", route.GetAllUsers) // Funciona
+	e.GET("/usuarios/:id", route.GetUser) // Funciona
+	e.POST("/usuarios", route.PostUser)   // Funciona
+	e.PUT("/usuarios/:id", route.PutUser)
+	e.DELETE("/usuarios/:id", route.DeleteUser) // Funciona
+
+	// Questions
+	e.GET("/preguntas", route.GetAllQuestion)        //Funciona
+	e.GET("/preguntas/:id", route.GetQuestion)       // Funciona
+	e.POST("/preguntas", route.PostQuestion)         // Funciona
+	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

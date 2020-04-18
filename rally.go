@@ -28,7 +28,25 @@ func main() {
 
 	e := echo.New()
 
-	e.GET("/respuesta", route.GetRespuesta)
+	//Respuesta
+	e.GET("/respuesta/:ID", route.GetRespuesta)
+	e.GET("/respuesta", route.Respuestas)
+	e.POST("/respuesta", route.PostRespuesta)
+	e.PUT("/respuesta/:ID", route.PutRespuesta)
+	e.GET("/respuesta", route.BuscarRespuestas)
+
+	//Registro de respuestas
+	e.POST("/regrespuesta", route.PostRegRespuesta)
+	e.GET("/regrespuesta", route.RegRespuestas)
+	e.GET("/regrespuesta/:ID", route.RegRespuesta)
+	e.GET("/regrespuesta", route.BuscarRegRespuesta)
+
+	//Registro de tiempos
+	e.POST("/regtiempo", route.PostRegTiempo)
+	e.GET("/regtiempo", route.RegsTiempo)
+	e.GET("/regtiempo/:ID", route.RegTiempo)
+	e.GET("/regtiempo", route.BuscarRegRespuesta)
+
 	e.GET("/preguntas", route.GetAllQuestion)
 	// e.GET("/usuarios", route.GetAllUsers)
 	// e.POST("/usuarios", route.PostUser)

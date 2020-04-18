@@ -39,7 +39,7 @@ func PutRespuesta(c echo.Context) error {
 	DB.Find(&Resp, ID)
 
 	//Datos de los campos a actualizar
-	PutResp := models.Respuesta{}
+	PutResp := new(models.Respuesta)
 	if err := c.Bind(PutUser); err != nil {
 		panic(err)
 	}
@@ -47,7 +47,7 @@ func PutRespuesta(c echo.Context) error {
 	//Actualizando Datos
 	DB.Model(&Resp).Updates(PutResp)
 
-	return c.JSON(http.StatusOK, PutUser)
+	return c.JSON(http.StatusOK, Resp)
 }
 
 //PostRespuesta Agregar respuesta

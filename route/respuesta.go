@@ -78,5 +78,9 @@ func BuscarRespuestas(c echo.Context) error {
 		panic(err)
 	}
 
+	if Respues == nil {
+		return c.NoContent(http.StatusNotFound)
+	}
+
 	return c.JSON(http.StatusOK, Respues)
 }

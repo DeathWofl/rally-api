@@ -15,7 +15,7 @@ func GetAllQuestion(c echo.Context) error {
 	return c.JSON(http.StatusOK, question)
 }
 
-func getQuestion(c echo.Context) error {
+func GetQuestion(c echo.Context) error {
 	DB := db.Init()
 	question := models.Pregunta{}
 	id := c.Param("id")
@@ -23,7 +23,7 @@ func getQuestion(c echo.Context) error {
 	return c.JSON(http.StatusOK, question)
 }
 
-func postQuestion(c echo.Context) error {
+func PostQuestion(c echo.Context) error {
 	DB := db.Init()
 	question := models.Pregunta{}
 	err := c.Bind(&question)

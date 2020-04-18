@@ -6,12 +6,13 @@ import (
 
 	"github.com/DeathWofl/rally-api/db"
 	"github.com/DeathWofl/rally-api/migration"
-	"github.com/labstack/echo"
 	"github.com/DeathWofl/rally-api/route"
+	"github.com/labstack/echo"
 )
 
 func main() {
 	db.Init()
+	defer db.DB.Close()
 
 	var migrate string
 

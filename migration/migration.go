@@ -8,7 +8,7 @@ import (
 //Migrate migracion a la base de datos
 func Migrate() {
 
-	DB := db.Init()
+	DB := db.DBManager()
 
 	DB.LogMode(true)
 

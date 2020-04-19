@@ -49,3 +49,16 @@ func DeleteQuestion(c echo.Context) error {
 	}
 	return c.String(http.StatusOK, "Pregunta eliminada")
 }
+
+func PutQuestion(c echo.Context) error {
+	DB := db.DBManager()
+	id := c.Param("id")
+	question := models.Pregunta{}
+	DB.Find(&question, id)
+	putquestion := new(models.Pregunta)
+	if err := c.Bind(putquestion); err != nil {
+		panic(err)
+	}
+	DB.Model(&question).Updates(&putquestion)
+	return c.JSON(http.StatusOK, question)
+}

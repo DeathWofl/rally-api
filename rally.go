@@ -35,17 +35,14 @@ func main() {
 	e.PUT("/respuesta/:ID", route.PutRespuesta)
 	e.GET("/respuesta", route.BuscarRespuestas)
 
-	//Registro de respuestas
-	e.POST("/regrespuesta", route.PostRegRespuesta)
-	e.GET("/regrespuesta", route.RegRespuestas)
-	e.GET("/regrespuesta/:ID", route.RegRespuesta)
-	e.GET("/regrespuesta", route.BuscarRegRespuesta)
+	// //Registro de respuestas
+	// e.POST("/regrespuesta", route.PostRegRespuesta)
+	// e.GET("/regrespuesta", route.RegRespuestas)
+	// e.GET("/regrespuesta/:ID", route.RegRespuesta)
+	// e.GET("/regrespuesta", route.BuscarRegRespuesta)
 
 	//Registro de tiempos
-	e.POST("/regtiempo", route.PostRegTiempo)
-	e.GET("/regtiempo", route.RegsTiempo)
-	e.GET("/regtiempo/:ID", route.RegTiempo)
-	e.GET("/regtiempo", route.BuscarRegRespuesta)
+	//
 
 	e.GET("/preguntas", route.GetAllQuestion)
 	// e.GET("/usuarios", route.GetAllUsers)
@@ -53,16 +50,17 @@ func main() {
 	// e.DELETE("/usuarios", route.DeleteUser)
 
 	// Users
-	e.GET("/usuarios", route.GetAllUsers) // Funciona
-	e.GET("/usuarios/:id", route.GetUser) // Funciona
-	e.POST("/usuarios", route.PostUser)   // Funciona
-	e.PUT("/usuarios/:id", route.PutUser)
+	e.GET("/usuarios", route.GetAllUsers)       // Funciona
+	e.GET("/usuarios/:id", route.GetUser)       // Funciona
+	e.POST("/usuarios", route.PostUser)         // Funciona
+	e.PUT("/usuarios/:id", route.PutUser)       // Funciona
 	e.DELETE("/usuarios/:id", route.DeleteUser) // Funciona
 
 	// Questions
-	e.GET("/preguntas", route.GetAllQuestion)        //Funciona
+	e.GET("/preguntas", route.GetAllQuestion)        // Funciona
 	e.GET("/preguntas/:id", route.GetQuestion)       // Funciona
 	e.POST("/preguntas", route.PostQuestion)         // Funciona
+	e.PUT("/preguntas/:id", route.PutQuestion)       // Funciona
 	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
 
 	e.Logger.Fatal(e.Start(":1323"))

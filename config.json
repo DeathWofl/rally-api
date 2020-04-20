@@ -1,7 +1,7 @@
 {
     "Server":"localhost",
-    "Port":"8019",
+    "Port":"3306",
     "User":"root",
     "Database": "rallydb",
-    "Password":"J010814"
+    "Password":"123456"
 }

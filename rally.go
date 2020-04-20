@@ -62,6 +62,21 @@ func main() {
 	e.POST("/preguntas", route.PostQuestion)         // Funciona
 	e.PUT("/preguntas/:id", route.PutQuestion)       // Funciona
 	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
+	
+	
+	//Equipos
+	e.GET("/equipo", route.GetAllEquipos)
+	e.GET("/equipo/:id", route.GetEquiposID)
+	e.POST("/equipo", route.PostEquipo)
+	e.PUT("/equipo/:id", route.PutEquipo)
+	e.DELETE("/equipo/:id", route.DeleteEquipo)
+
+	//Estaciones
+	e.GET("/estacion", route.GetAllEstacion)
+	e.GET("/estacion/:id", route.GetEstacionID)
+	e.POST("/estacion", route.PostEstacion)
+	e.PUT("/estacion/:id", route.PutEstacion)
+	e.DELETE("/estacion/:id", route.DeleteEstacion)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

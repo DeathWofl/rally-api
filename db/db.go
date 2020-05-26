@@ -18,6 +18,7 @@ func Init() *gorm.DB {
 	c := configuration.GetConfiguration()
 
 	// database string connection
+	// dsc := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", c.User, c.Password, c.Database)
 	dsc := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", c.User, c.Password, c.Database)
 
 	DB, err = gorm.Open("mysql", dsc)

@@ -12,34 +12,22 @@ func Migrate() {
 
 	DB.LogMode(true)
 
-	//Equipos
-	DB.DropTableIfExists(&models.Equipo{})
-	DB.CreateTable(&models.Equipo{})
+	//Las borras en caso de que existan
+	DB.DropTableIfExists(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
 
-	// Estaciones
-	DB.DropTableIfExists(&models.Estacion{})
-	DB.CreateTable(&models.Estacion{})
+	//Crea las tablas
+	DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
 
-	// Respuestas
-	DB.DropTableIfExists(&models.Respuesta{})
-	DB.CreateTable(&models.Respuesta{})
+	//Reaciones
+	DB.Model(&models.Pregunta{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Restrict")
+	DB.Model(&models.RegTiempo{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Restrict")
+	DB.Model(&models.RegResp{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Restrict")
+	DB.Model(&models.RegTiempo{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Restrict")
+	DB.Model(&models.RegResp{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Restrict")
+	DB.Model(&models.Respuesta{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Restrict")
 
-	// Preguntas
-	DB.DropTableIfExists(&models.Pregunta{})
-	DB.CreateTable(&models.Pregunta{})
-
-	// Usuarios
-	DB.DropTableIfExists(&models.Usuario{})
-	DB.CreateTable(&models.Usuario{})
+	// Create a admin user
 	user := models.Usuario{Nombre: "Admin", Username: "admin", Password: "admin"}
 	DB.Create(&user)
-
-	// Registros de respuestas
-	DB.DropTableIfExists(&models.RegResp{})
-	DB.CreateTable(&models.RegResp{})
-
-	// Registros de Tiempos
-	DB.DropTableIfExists(&models.RegTiempo{})
-	DB.CreateTable(&models.RegTiempo{})
 
 }

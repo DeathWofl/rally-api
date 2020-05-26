@@ -28,42 +28,6 @@ func main() {
 
 	e := echo.New()
 
-	//Respuesta
-	e.GET("/respuesta/:ID", route.GetRespuesta)
-	e.GET("/respuesta", route.Respuestas)
-	e.POST("/respuesta", route.PostRespuesta)
-	e.PUT("/respuesta/:ID", route.PutRespuesta)
-	e.GET("/respuesta", route.BuscarRespuestas)
-
-	// //Registro de respuestas
-	// e.POST("/regrespuesta", route.PostRegRespuesta)
-	// e.GET("/regrespuesta", route.RegRespuestas)
-	// e.GET("/regrespuesta/:ID", route.RegRespuesta)
-	// e.GET("/regrespuesta", route.BuscarRegRespuesta)
-
-	//Registro de tiempos
-	//
-
-	e.GET("/preguntas", route.GetAllQuestion)
-	// e.GET("/usuarios", route.GetAllUsers)
-	// e.POST("/usuarios", route.PostUser)
-	// e.DELETE("/usuarios", route.DeleteUser)
-
-	// Users
-	e.GET("/usuarios", route.GetAllUsers)       // Funciona
-	e.GET("/usuarios/:id", route.GetUser)       // Funciona
-	e.POST("/usuarios", route.PostUser)         // Funciona
-	e.PUT("/usuarios/:id", route.PutUser)       // Funciona
-	e.DELETE("/usuarios/:id", route.DeleteUser) // Funciona
-
-	// Questions
-	e.GET("/preguntas", route.GetAllQuestion)        // Funciona
-	e.GET("/preguntas/:id", route.GetQuestion)       // Funciona
-	e.POST("/preguntas", route.PostQuestion)         // Funciona
-	e.PUT("/preguntas/:id", route.PutQuestion)       // Funciona
-	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
-	
-	
 	//Equipos
 	e.GET("/equipo", route.GetAllEquipos)
 	e.GET("/equipo/:id", route.GetEquiposID)
@@ -72,11 +36,44 @@ func main() {
 	e.DELETE("/equipo/:id", route.DeleteEquipo)
 
 	//Estaciones
+	e.POST("/estacion", route.PostEstacion)
 	e.GET("/estacion", route.GetAllEstacion)
 	e.GET("/estacion/:id", route.GetEstacionID)
-	e.POST("/estacion", route.PostEstacion)
 	e.PUT("/estacion/:id", route.PutEstacion)
 	e.DELETE("/estacion/:id", route.DeleteEstacion)
+
+	//Respuesta
+	e.GET("/respuesta/:ID", route.GetRespuesta)
+	e.GET("/respuesta", route.Respuestas)
+	e.POST("/respuesta", route.PostRespuesta)
+	e.PUT("/respuesta/:ID", route.PutRespuesta)
+	e.GET("/respuesta", route.BuscarRespuestas)
+
+	// Questions
+	e.GET("/preguntas", route.GetAllQuestion)        // Funciona
+	e.GET("/preguntas/:id", route.GetQuestion)       // Funciona
+	e.POST("/preguntas", route.PostQuestion)         // Funciona
+	e.PUT("/preguntas/:id", route.PutQuestion)       // Funciona
+	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
+
+	// Users
+	e.GET("/usuarios", route.GetAllUsers)       // Funciona
+	e.GET("/usuarios/:id", route.GetUser)       // Funciona
+	e.POST("/usuarios", route.PostUser)         // Funciona
+	e.PUT("/usuarios/:id", route.PutUser)       // Funciona
+	e.DELETE("/usuarios/:id", route.DeleteUser) // Funciona
+
+	// Registro de respuestas
+	e.POST("/regrespuesta", route.PostRegRespuesta)
+	e.GET("/regrespuesta", route.RegRespuestas)
+	e.GET("/regrespuesta/:ID", route.RegRespuesta)
+	e.GET("/regrespuesta", route.BuscarRegRespuesta)
+
+	//Registro de tiempos
+	e.POST("/regtiempo", route.PostRegTiempo)
+	e.GET("/regtiempo", route.RegsTiempo)
+	e.GET("/regtiempo/:ID", route.RegTiempo)
+	e.GET("/regtiempo", route.BuscarRegRespuesta)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

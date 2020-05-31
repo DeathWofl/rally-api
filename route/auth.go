@@ -21,18 +21,11 @@ func LoginEstu(c echo.Context) error {
 
 	DB := db.DBManager()
 
-	user := models.Equipo{}
-	err := c.Bind(&user)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity)
-	}
-
-	matriculaE1 := user.MatriculaE1
-	matriculaE2 := user.MatriculaE2
-	matriculaE3 := user.MatriculaE3
+	matriculaE1 := c.FormValue("MatriculaE1")
+	matriculaE2 := c.FormValue("MatriculaE2")
+	matriculaE3 := c.FormValue("MatriculaE3")
 
 	result := models.Equipo{}
-
 	DB.
 		Where(models.Equipo{MatriculaE1: matriculaE1}).
 		Or(models.Equipo{MatriculaE2: matriculaE1}).
@@ -79,14 +72,11 @@ func LoginUser(c echo.Context) error {
 
 	DB := db.DBManager()
 
-	user := models.Usuario{}
-	err := c.Bind(&user)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusUnprocessableEntity)
-	}
+	username := c.FormValue("Username")
+	password := c.FormValue("Password")
 
 	result := models.Usuario{}
-	DB.Where(&models.Usuario{Username: user.Username, Password: user.Password}).First(&result)
+	DB.Where(&models.Usuario{Username: username, Password: password}).First(&result)
 
 	if result.Nombre == "" {
 		return echo.ErrNotFound

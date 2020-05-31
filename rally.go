@@ -3,11 +3,13 @@ package main
 import (
 	"flag"
 	"fmt"
+	"net/http"
 
 	"github.com/DeathWofl/rally-api/db"
 	"github.com/DeathWofl/rally-api/migration"
 	"github.com/DeathWofl/rally-api/route"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 func main() {
@@ -27,53 +29,75 @@ func main() {
 	}
 
 	e := echo.New()
+	p := e.Group("/api")
 
+	//CORS
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
+	}))
+
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	// Rutas sin authorizacion
+	p.POST("/loginalumnos", route.LoginEstu)  // probado
+	p.POST("/loginmaestros", route.LoginUser) // Probado
+
+	app := p.Group("/app")
+
+	config := middleware.JWTConfig{
+		Claims:     &route.JWTCustomClaim{},
+		SigningKey: ([]byte("itesarally")),
+	}
+	app.Use(middleware.JWTWithConfig(config))
+
+	//// Authorization
 	//Equipos
-	e.GET("/equipo", route.GetAllEquipos)
-	e.GET("/equipo/:id", route.GetEquiposID)
-	e.POST("/equipo", route.PostEquipo)
-	e.PUT("/equipo/:id", route.PutEquipo)
-	e.DELETE("/equipo/:id", route.DeleteEquipo)
+	app.GET("/equipo", route.GetAllEquipos)       // Probado
+	app.GET("/equipo/:id", route.GetEquipo)       // Probado
+	app.POST("/equipo", route.PostEquipo)         // Probado
+	app.PUT("/equipo/:id", route.PutEquipo)       // Probado
+	app.DELETE("/equipo/:id", route.DeleteEquipo) // Probado
 
 	//Estaciones
-	e.POST("/estacion", route.PostEstacion)
-	e.GET("/estacion", route.GetAllEstacion)
-	e.GET("/estacion/:id", route.GetEstacionID)
-	e.PUT("/estacion/:id", route.PutEstacion)
-	e.DELETE("/estacion/:id", route.DeleteEstacion)
+	app.POST("/estacion", route.PostEstacion)         // Probado
+	app.GET("/estacion", route.GetAllEstacion)        // Probado
+	app.GET("/estacion/:id", route.GetEstacion)       // Probado
+	app.PUT("/estacion/:id", route.PutEstacion)       // Probado
+	app.DELETE("/estacion/:id", route.DeleteEstacion) // Probado
 
 	//Respuesta
-	e.GET("/respuesta/:ID", route.GetRespuesta)
-	e.GET("/respuesta", route.Respuestas)
-	e.POST("/respuesta", route.PostRespuesta)
-	e.PUT("/respuesta/:ID", route.PutRespuesta)
-	e.GET("/respuesta", route.BuscarRespuestas)
+	app.GET("/respuestas/:ID", route.GetRespuesta)      // Probado
+	app.GET("/respuestas", route.GetAllRespuestas)      // Probado
+	app.POST("/respuestas", route.PostRespuesta)        // Probado
+	app.PUT("/respuestas/:ID", route.PutRespuesta)      //Probado
+	app.DELETE("/respuestas/:ID", route.DeleteEstacion) // Probado
 
-	// Questions
-	e.GET("/preguntas", route.GetAllQuestion)        // Funciona
-	e.GET("/preguntas/:id", route.GetQuestion)       // Funciona
-	e.POST("/preguntas", route.PostQuestion)         // Funciona
-	e.PUT("/preguntas/:id", route.PutQuestion)       // Funciona
-	e.DELETE("/preguntas/:id", route.DeleteQuestion) // Funciona
+	// Preguntas
+	app.GET("/preguntas", route.GetAllQuestion)        // Probado
+	app.GET("/preguntas/:id", route.GetQuestion)       // Probado
+	app.POST("/preguntas", route.PostQuestion)         // Probado
+	app.PUT("/preguntas/:id", route.PutQuestion)       // Probado
+	app.DELETE("/preguntas/:id", route.DeleteQuestion) // Probado
 
-	// Users
-	e.GET("/usuarios", route.GetAllUsers)       // Funciona
-	e.GET("/usuarios/:id", route.GetUser)       // Funciona
-	e.POST("/usuarios", route.PostUser)         // Funciona
-	e.PUT("/usuarios/:id", route.PutUser)       // Funciona
-	e.DELETE("/usuarios/:id", route.DeleteUser) // Funciona
+	// Usuarios
+	app.GET("/usuarios", route.GetAllUsers)       // Probado
+	app.GET("/usuarios/:id", route.GetUser)       // Probado
+	app.POST("/usuarios", route.PostUser)         // Probado
+	app.PUT("/usuarios/:id", route.PutUser)       // Probado
+	app.DELETE("/usuarios/:id", route.DeleteUser) // Probado
 
 	// Registro de respuestas
-	e.POST("/regrespuesta", route.PostRegRespuesta)
-	e.GET("/regrespuesta", route.RegRespuestas)
-	e.GET("/regrespuesta/:ID", route.RegRespuesta)
-	e.GET("/regrespuesta", route.BuscarRegRespuesta)
+	app.POST("/regrespuesta", route.PostRegRespuesta)   // Probado
+	app.GET("/regrespuesta", route.GetAllRegRespuesta)  // Probado
+	app.GET("/regrespuesta/:id", route.GetRegRespuesta) // Probado
 
 	//Registro de tiempos
-	e.POST("/regtiempo", route.PostRegTiempo)
-	e.GET("/regtiempo", route.RegsTiempo)
-	e.GET("/regtiempo/:ID", route.RegTiempo)
-	e.GET("/regtiempo", route.BuscarRegRespuesta)
+	app.POST("/regtiempo", route.PostRegTiempo)   // Probado
+	app.GET("/regtiempo", route.GetAllRegsTiempo) // Probado
+	app.GET("/regtiempo/:id", route.GetRegTiempo) // Probado
 
+	// Crear branch y que sea con sqlite
 	e.Logger.Fatal(e.Start(":1323"))
 }

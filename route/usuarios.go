@@ -8,7 +8,7 @@ import (
 	"github.com/labstack/echo"
 )
 
-// Select all user
+//GetAllUsers Select all user
 func GetAllUsers(c echo.Context) error {
 	DB := db.DBManager()
 	user := []models.Usuario{}
@@ -16,7 +16,7 @@ func GetAllUsers(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// Selec one user
+//GetUser Selec one user
 func GetUser(c echo.Context) error {
 	DB := db.DBManager()
 	id := c.Param("id")
@@ -28,7 +28,7 @@ func GetUser(c echo.Context) error {
 	return c.JSON(http.StatusOK, user)
 }
 
-// Create new user
+//PostUser Create new user
 func PostUser(c echo.Context) error {
 	DB := db.DBManager()
 	user := models.Usuario{}
@@ -48,9 +48,10 @@ func DeleteUser(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
 	DB.Delete(&user, id)
-	return c.String(http.StatusOK, "Usuario eliminado")
+	return c.NoContent(http.StatusOK)
 }
 
+//PutUser actualizar un usuario
 func PutUser(c echo.Context) error {
 	DB := db.DBManager()
 	id := c.Param("id")

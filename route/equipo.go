@@ -8,51 +8,88 @@ import (
 	"github.com/labstack/echo"
 )
 
-//Retorna todos los equipos
+//GetAllEquipos Retorna todos los equipos
 func GetAllEquipos(c echo.Context) error {
 	DB := db.DBManager()
 	equipo := []models.Equipo{}
+	DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
 	DB.Find(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 
-//Retorna equipo por ID
-func GetEquiposID(c echo.Context) error{
-	DB := db.DBManager()	
+//GetEquipo Retorna equipo por ID
+func GetEquipo(c echo.Context) error {
+	DB := db.DBManager()
 	equipo := models.Equipo{}
 	id := c.Param("id")
+	DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
 	DB.Find(&equipo, id)
 	return c.JSON(http.StatusOK, equipo)
 }
 
-//Registra un equipo
-func PostEquipo(c echo.Context) error{
+//PostEquipo Registra un equipo
+func PostEquipo(c echo.Context) error {
+
 	DB := db.DBManager()
+
+	// Captura los datos
 	equipo := models.Equipo{}
 	err := c.Bind(&equipo)
 	if err != nil {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity)
 	}
+
+	// Busqueda para evitar que se repita una matricula
+	result := models.Equipo{}
+
+	// Confirma que la matricula de ese estudiante no este registrada con anterioridad en la BD
+	// Especificamente del estudiante de la matricula 1
+	DB.Where(models.Equipo{MatriculaE1: equipo.MatriculaE1}).
+		Or(models.Equipo{MatriculaE2: equipo.MatriculaE1}).
+		Or(models.Equipo{MatriculaE3: equipo.MatriculaE1}).
+		Find(&result)
+	if result.MatriculaE1 != "" {
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 1 ya esta registrada")
+	}
+
+	// Especificamente del estudiante de la matricula 2
+	DB.Where(models.Equipo{MatriculaE1: equipo.MatriculaE2}).
+		Or(models.Equipo{MatriculaE2: equipo.MatriculaE2}).
+		Or(models.Equipo{MatriculaE3: equipo.MatriculaE2}).
+		Find(&result)
+	if result.MatriculaE2 != "" {
+		return c.String(http.StatusOK, "La Matricula del Estudiante 2 ya esta registrada")
+	}
+
+	// Especificamente del estudiante de la matricula 3
+	DB.Where(models.Equipo{MatriculaE1: equipo.MatriculaE3}).
+		Or(models.Equipo{MatriculaE2: equipo.MatriculaE3}).
+		Or(models.Equipo{MatriculaE3: equipo.MatriculaE3}).
+		Find(&result)
+	if result.MatriculaE1 != "" {
+		return c.String(http.StatusOK, "La Matricula del Estudiante 3 ya esta registrada")
+	}
+
 	DB.Create(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 
-//Actualiza un equipo
-func PutEquipo(c echo.Context) error{
+//PutEquipo Actualiza un equipo
+func PutEquipo(c echo.Context) error {
 	DB := db.DBManager()
 	equipo := models.Equipo{}
 	id := c.Param("id")
 	DB.Find(&equipo, id)
 	putequipo := new(models.Equipo)
-	if err := c.Bind(putequipo); err !=nil{
+	if err := c.Bind(putequipo); err != nil {
 		panic(err)
 	}
 	DB.Model(&equipo).Updates(&putequipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 
-//Elimina un equipo
-func DeleteEquipo(c echo.Context) error{
+//DeleteEquipo Elimina un equipo
+func DeleteEquipo(c echo.Context) error {
 	DB := db.DBManager()
 	equipo := models.Equipo{}
 	id := c.Param("id")
@@ -60,10 +97,5 @@ func DeleteEquipo(c echo.Context) error{
 	if err := c.Bind(&equipo); err != nil {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Equipo eliminado")
 	}
-	return c.String(http.StatusOK, "Equipo eliminado")
+	return c.NoContent(http.StatusOK)
 }
-
-
-
-
-

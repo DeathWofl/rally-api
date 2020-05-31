@@ -18,36 +18,25 @@ func GetRespuesta(c echo.Context) error {
 }
 
 //Respuestas retorna todas las respuestas existentes
-func Respuestas(c echo.Context) error {
+func GetAllRespuestas(c echo.Context) error {
 	DB := db.DBManager()
 	Resp := []models.Respuesta{}
-	DB.Find(&Resp)
+	DB.Preload("preguntas").Find(&Resp)
 	return c.JSON(http.StatusOK, Resp)
 }
 
 //PutRespuesta actualizar una respuesta
 func PutRespuesta(c echo.Context) error {
-
-	//abro conexion
 	DB := db.DBManager()
-
-	// tomo el ID de parametro
-	ID := c.Param("ID")
-
-	// Respuesta antes de actualizar
-	Resp := models.Respuesta{}
-	DB.Find(&Resp, ID)
-
-	//Datos de los campos a actualizar
-	PutResp := new(models.Respuesta)
-	if err := c.Bind(PutUser); err != nil {
+	resp := models.Respuesta{}
+	id := c.Param("ID")
+	DB.Find(&resp, id)
+	putequipo := new(models.Respuesta)
+	if err := c.Bind(putequipo); err != nil {
 		panic(err)
 	}
-
-	//Actualizando Datos
-	DB.Model(&Resp).Updates(PutResp)
-
-	return c.JSON(http.StatusOK, Resp)
+	DB.Model(&resp).Updates(&putequipo)
+	return c.JSON(http.StatusOK, resp)
 }
 
 //PostRespuesta Agregar respuesta
@@ -55,7 +44,7 @@ func PostRespuesta(c echo.Context) error {
 	DB := db.DBManager()
 
 	Resp := models.Respuesta{}
-	err := c.Bind(Resp)
+	err := c.Bind(&Resp)
 	if err != nil {
 		panic(err)
 	}
@@ -64,23 +53,14 @@ func PostRespuesta(c echo.Context) error {
 	return c.JSON(http.StatusOK, Resp)
 }
 
-//BuscarRespuestas busca respuestas que correspondan a una pregunta
-func BuscarRespuestas(c echo.Context) error {
+//DeleteRespuesta Elimina un Estacion
+func DeleteRespuesta(c echo.Context) error {
 	DB := db.DBManager()
-
-	Pregunt := models.Pregunta{}
-	c.Bind(Pregunt)
-
-	Respues := []models.Respuesta{}
-
-	err := DB.Model(&Respues).Related(&Pregunt)
-	if err != nil {
-		panic(err)
+	respuesta := models.Respuesta{}
+	id := c.Param("id")
+	DB.Delete(&respuesta, id)
+	if err := c.Bind(&respuesta); err != nil {
+		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Estacion eliminada")
 	}
-
-	if Respues == nil {
-		return c.NoContent(http.StatusNotFound)
-	}
-
-	return c.JSON(http.StatusOK, Respues)
+	return c.NoContent(http.StatusOK)
 }

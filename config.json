@@ -2,6 +2,6 @@
     "Server":"localhost",
     "Port":"3306",
     "User":"root",
-    "Database": "rallydb",
-    "Password":"123456"
+    "Database": "rally",
+    "Password":"DeathWolf02"
 }

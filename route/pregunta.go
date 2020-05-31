@@ -8,25 +8,27 @@ import (
 	"github.com/labstack/echo"
 )
 
+//GetAllQuestion Todas las preguntas
 func GetAllQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := []models.Pregunta{}
-	DB.Find(&question)
+	DB.Preload("respuesta").Preload("reg_regs").Find(&question)
 	return c.JSON(http.StatusOK, question)
 }
 
-// Select one question
+//GetQuestion Select one question
 func GetQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := models.Pregunta{}
 	id := c.Param("id")
-	DB.First(&question, id)
+	DB.Preload("respuesta").Preload("reg_regs").First(&question, id)
 	if question.ID == 0 {
 		return c.JSON(http.StatusNotFound, "Pregunta no existente")
 	}
 	return c.JSON(http.StatusOK, question)
 }
 
+//PostQuestion borrar pregunta
 func PostQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := models.Pregunta{}
@@ -38,18 +40,19 @@ func PostQuestion(c echo.Context) error {
 	return c.JSON(http.StatusOK, question)
 }
 
-// Delete question
+//DeleteQuestion Delete question
 func DeleteQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := models.Pregunta{}
 	id := c.Param("id")
 	DB.Delete(&question, id)
-	if question.ID == 0 {
-		return c.JSON(http.StatusNotFound, "No se ha podido eliminar la pregunta.")
+	if id == "" {
+		return c.NoContent(http.StatusNotFound)
 	}
-	return c.String(http.StatusOK, "Pregunta eliminada")
+	return c.NoContent(http.StatusOK)
 }
 
+//PutQuestion Actualizar pregunta
 func PutQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	id := c.Param("id")

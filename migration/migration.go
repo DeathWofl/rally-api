@@ -19,12 +19,12 @@ func Migrate() {
 	DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
 
 	//Reaciones
-	DB.Model(&models.Pregunta{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Restrict")
-	DB.Model(&models.RegTiempo{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Restrict")
-	DB.Model(&models.RegResp{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Restrict")
-	DB.Model(&models.RegTiempo{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Restrict")
-	DB.Model(&models.RegResp{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Restrict")
-	DB.Model(&models.Respuesta{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Restrict")
+	DB.Model(&models.Pregunta{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
+	DB.Model(&models.RegTiempo{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
+	DB.Model(&models.RegResp{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
+	DB.Model(&models.RegTiempo{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
+	DB.Model(&models.RegResp{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
+	DB.Model(&models.Respuesta{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
 
 	// Create a admin user
 	user := models.Usuario{Nombre: "Admin", Username: "admin", Password: "admin"}

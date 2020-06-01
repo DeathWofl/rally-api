@@ -11,6 +11,6 @@ type Equipo struct {
 	CodigoGrupo string `json:"CodigoGrupo" gorm:"not null;type:varchar(100);" sql:"index"`
 	RegResps    []RegResp
 	RegTiempos  []RegTiempo
-	Token       string `gorm:"-" json:"-"`
+	Token       string `gorm:"-"`
 	LoggedIn    bool   `gorm:"-" json:"-"`
 }

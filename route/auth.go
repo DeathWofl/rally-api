@@ -21,28 +21,19 @@ func LoginEstu(c echo.Context) error {
 
 	DB := db.DBManager()
 
-	matriculaE1 := c.FormValue("MatriculaE1")
-	matriculaE2 := c.FormValue("MatriculaE2")
-	matriculaE3 := c.FormValue("MatriculaE3")
-
 	result := models.Equipo{}
-	DB.
-		Where(models.Equipo{MatriculaE1: matriculaE1}).
-		Or(models.Equipo{MatriculaE2: matriculaE1}).
-		Or(models.Equipo{MatriculaE3: matriculaE1}).
-		Where(models.Equipo{MatriculaE1: matriculaE2}).
-		Or(models.Equipo{MatriculaE2: matriculaE2}).
-		Or(models.Equipo{MatriculaE3: matriculaE2}).
-		Where(models.Equipo{MatriculaE1: matriculaE3}).
-		Or(models.Equipo{MatriculaE2: matriculaE3}).
-		Or(models.Equipo{MatriculaE3: matriculaE3}).
-		First(&result)
+	c.Bind(&result)
 
-	if result.CodigoGrupo == "" {
-		return c.String(http.StatusNotAcceptable, "Las matriculas no pertenecen a un mismo grupo")
+	sear := models.Equipo{}
+	DB.Where(&models.Equipo{MatriculaE1: result.MatriculaE1, MatriculaE2: result.MatriculaE2, MatriculaE3: result.MatriculaE3}).First(&sear)
+
+	if sear.CodigoGrupo == "" {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"response": "Usuario invalido, confirme la informacion enviada",
+		})
 	}
 
-	if result.LoggedIn == true {
+	if sear.LoggedIn == true {
 		return c.String(http.StatusNotAcceptable, "Ya esta loggeado.")
 	}
 
@@ -61,10 +52,10 @@ func LoginEstu(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	result.Token = t
-	result.LoggedIn = true
+	sear.Token = t
+	sear.LoggedIn = true
 
-	return c.JSON(http.StatusOK, result)
+	return c.JSON(http.StatusOK, sear)
 }
 
 //LoginUser logearse maestros
@@ -72,14 +63,16 @@ func LoginUser(c echo.Context) error {
 
 	DB := db.DBManager()
 
-	username := c.FormValue("Username")
-	password := c.FormValue("Password")
-
 	result := models.Usuario{}
-	DB.Where(&models.Usuario{Username: username, Password: password}).First(&result)
+	c.Bind(&result)
 
-	if result.Nombre == "" {
-		return echo.ErrNotFound
+	sear := models.Usuario{}
+	DB.Where(&models.Usuario{Username: result.Username, Password: result.Password}).First(&sear)
+
+	if sear.Username != result.Username || sear.Password != result.Password {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"response": "Usuario invalido",
+		})
 	}
 
 	claims := &JWTCustomClaim{

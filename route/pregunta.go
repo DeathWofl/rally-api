@@ -1,7 +1,9 @@
 package route
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/DeathWofl/rally-api/db"
 	"github.com/DeathWofl/rally-api/models"
@@ -18,10 +20,23 @@ func GetAllQuestion(c echo.Context) error {
 
 //GetQuestion Select one question
 func GetQuestion(c echo.Context) error {
+
+	//DB
 	DB := db.DBManager()
+
+	//busqueda
 	question := models.Pregunta{}
-	id := c.Param("id")
-	DB.Preload("respuesta").Preload("reg_regs").First(&question, id)
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		panic(err)
+	}
+	ID := uint(id)
+	fmt.Println(ID)
+	DB.Find(&question, ID)
+	DB.Where(&models.Respuesta{PreguntaID: ID}).Find(&question.Respuestas)
+	DB.Where(&models.RegResp{PreguntaID: ID}).Find(&question.RegResps)
+
+	//retornando
 	if question.ID == 0 {
 		return c.JSON(http.StatusNotFound, "Pregunta no existente")
 	}

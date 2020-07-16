@@ -68,11 +68,11 @@ func main() {
 	app.DELETE("/estacion/:id", route.DeleteEstacion) // Probado
 
 	//Respuesta
-	app.GET("/respuestas/:ID", route.GetRespuesta)      // Probado
+	app.GET("/respuestas/:id", route.GetRespuesta)      // Probado
 	app.GET("/respuestas", route.GetAllRespuestas)      // Probado
 	app.POST("/respuestas", route.PostRespuesta)        // Probado
-	app.PUT("/respuestas/:ID", route.PutRespuesta)      //Probado
-	app.DELETE("/respuestas/:ID", route.DeleteEstacion) // Probado
+	app.PUT("/respuestas/:id", route.PutRespuesta)      //Probado
+	app.DELETE("/respuestas/:id", route.DeleteEstacion) // Probado
 
 	// Preguntas
 	app.GET("/preguntas", route.GetAllQuestion)        // Probado

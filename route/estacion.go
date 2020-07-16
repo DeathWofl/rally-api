@@ -19,9 +19,13 @@ func GetAllEstacion(c echo.Context) error {
 //GetEstacion Retorna Estacion por ID
 func GetEstacion(c echo.Context) error {
 	DB := db.DBManager()
-	estacion := models.Estacion{}
 	id := c.Param("id")
-	DB.Preload("pregunta").Preload("reg_tiempos").First(&estacion, id)
+	estacion := models.Estacion{}
+	DB.First(&estacion, id)
+	if estacion.ID == 0 {
+		return c.String(http.StatusOK, "La estacion no existe")
+	}
+	// DB.Preload("pregunta").Preload("reg_tiempos").First(&estacion, id)
 	return c.JSON(http.StatusOK, estacion)
 }
 
@@ -55,7 +59,7 @@ func PutEstacion(c echo.Context) error {
 func DeleteEstacion(c echo.Context) error {
 	DB := db.DBManager()
 	estacion := models.Estacion{}
-	id := c.Param("ID")
+	id := c.Param("id")
 	DB.Delete(&estacion, id)
 	if err := c.Bind(&estacion); err != nil {
 		return echo.NewHTTPError(http.StatusUnprocessableEntity, "Estacion eliminada")

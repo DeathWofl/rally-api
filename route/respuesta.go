@@ -11,13 +11,13 @@ import (
 //GetRespuesta retorna especificamente una respuesta por su ID
 func GetRespuesta(c echo.Context) error {
 	DB := db.DBManager()
-	id := c.Param("ID")
+	id := c.Param("id")
 	Resp := models.Respuesta{}
 	DB.Find(&Resp, id)
 	return c.JSON(http.StatusOK, Resp)
 }
 
-//Respuestas retorna todas las respuestas existentes
+//GetAllRespuestas retorna todas las respuestas existentes
 func GetAllRespuestas(c echo.Context) error {
 	DB := db.DBManager()
 	Resp := []models.Respuesta{}
@@ -29,7 +29,7 @@ func GetAllRespuestas(c echo.Context) error {
 func PutRespuesta(c echo.Context) error {
 	DB := db.DBManager()
 	resp := models.Respuesta{}
-	id := c.Param("ID")
+	id := c.Param("id")
 	DB.Find(&resp, id)
 	putequipo := new(models.Respuesta)
 	if err := c.Bind(putequipo); err != nil {

@@ -1,4 +1,4 @@
 ##files
-rally
-rally.exe
-config.json
+*.exe
+*.json
+*.tmp

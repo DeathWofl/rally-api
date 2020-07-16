@@ -20,10 +20,13 @@ func GetAllEquipos(c echo.Context) error {
 //GetEquipo Retorna equipo por ID
 func GetEquipo(c echo.Context) error {
 	DB := db.DBManager()
-	equipo := models.Equipo{}
 	id := c.Param("id")
-	DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
-	DB.Find(&equipo, id)
+	equipo := models.Equipo{}
+	DB.First(&equipo, id)
+	if equipo.ID == 0 {
+		return c.String(http.StatusOK, "El Equipo no existe")
+	}
+	// DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 

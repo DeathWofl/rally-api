@@ -25,16 +25,15 @@ func LoginEstu(c echo.Context) error {
 	c.Bind(&result)
 
 	sear := models.Equipo{}
-	DB.Where(&models.Equipo{MatriculaE1: result.MatriculaE1, MatriculaE2: result.MatriculaE2, MatriculaE3: result.MatriculaE3}).First(&sear)
+	DB.Where(&models.Equipo{MatriculaE1: result.MatriculaE1}).
+		Or(&models.Equipo{MatriculaE2: result.MatriculaE1}).
+		Or(&models.Equipo{MatriculaE3: result.MatriculaE3}).
+		First(&sear)
 
-	if sear.CodigoGrupo == "" {
+	if sear.ContraGrupo != result.ContraGrupo {
 		return c.JSON(http.StatusUnauthorized, map[string]string{
 			"response": "Usuario invalido, confirme la informacion enviada",
 		})
-	}
-
-	if sear.LoggedIn == true {
-		return c.String(http.StatusNotAcceptable, "Ya esta loggeado.")
 	}
 
 	// claims
@@ -42,7 +41,7 @@ func LoginEstu(c echo.Context) error {
 		time.Now().Unix(),
 		result.ID,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 10).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 		},
 	}
 
@@ -52,10 +51,10 @@ func LoginEstu(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	sear.Token = t
-	sear.LoggedIn = true
 
-	return c.JSON(http.StatusOK, sear)
+	return c.JSON(http.StatusOK, map[string]string{
+		"token": t,
+	})
 }
 
 //LoginUser logearse maestros
@@ -79,7 +78,7 @@ func LoginUser(c echo.Context) error {
 		time.Now().Unix(),
 		result.ID,
 		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Hour * 10).Unix(),
+			ExpiresAt: time.Now().Add(time.Hour * 72).Unix(),
 		},
 	}
 

@@ -61,7 +61,7 @@ func PostEquipo(c echo.Context) error {
 		Or(models.Equipo{MatriculaE3: equipo.MatriculaE2}).
 		Find(&result)
 	if result.MatriculaE2 != "" {
-		return c.String(http.StatusOK, "La Matricula del Estudiante 2 ya esta registrada")
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 2 ya esta registrada")
 	}
 
 	// Especificamente del estudiante de la matricula 3
@@ -70,7 +70,7 @@ func PostEquipo(c echo.Context) error {
 		Or(models.Equipo{MatriculaE3: equipo.MatriculaE3}).
 		Find(&result)
 	if result.MatriculaE1 != "" {
-		return c.String(http.StatusOK, "La Matricula del Estudiante 3 ya esta registrada")
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 3 ya esta registrada")
 	}
 
 	DB.Create(&equipo)
@@ -80,12 +80,41 @@ func PostEquipo(c echo.Context) error {
 //PutEquipo Actualiza un equipo
 func PutEquipo(c echo.Context) error {
 	DB := db.DBManager()
-	equipo := models.Equipo{}
 	id := c.Param("id")
+	equipo := models.Equipo{}
 	DB.Find(&equipo, id)
 	putequipo := new(models.Equipo)
 	if err := c.Bind(putequipo); err != nil {
 		panic(err)
+	}
+	validequipo := models.Equipo{}
+	DB.Where(models.Equipo{MatriculaE1: putequipo.MatriculaE1}).
+		Or(models.Equipo{MatriculaE2: putequipo.MatriculaE1}).
+		Or(models.Equipo{MatriculaE3: putequipo.MatriculaE1}).
+		Not(id).
+		Find(&validequipo)
+	if validequipo.MatriculaE1 != "" {
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 1 ya esta registrada")
+	}
+
+	// Especificamente del estudiante de la matricula 2
+	DB.Where(models.Equipo{MatriculaE1: putequipo.MatriculaE2}).
+		Or(models.Equipo{MatriculaE2: putequipo.MatriculaE2}).
+		Or(models.Equipo{MatriculaE3: putequipo.MatriculaE2}).
+		Not(id).
+		Find(&validequipo)
+	if validequipo.MatriculaE2 != "" {
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 2 ya esta registrada")
+	}
+
+	// Especificamente del estudiante de la matricula 3
+	DB.Where(models.Equipo{MatriculaE1: putequipo.MatriculaE3}).
+		Or(models.Equipo{MatriculaE2: putequipo.MatriculaE3}).
+		Or(models.Equipo{MatriculaE3: putequipo.MatriculaE3}).
+		Not(id).
+		Find(&validequipo)
+	if validequipo.MatriculaE1 != "" {
+		return c.String(http.StatusConflict, "La Matricula del Estudiante 3 ya esta registrada")
 	}
 	DB.Model(&equipo).Updates(&putequipo)
 	return c.JSON(http.StatusOK, equipo)

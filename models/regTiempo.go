@@ -9,7 +9,8 @@ import (
 //RegTiempo tabla de registros de tiempo
 type RegTiempo struct {
 	gorm.Model
-	EstacionID  uint      `json:"EstacionID"`
-	EquipoID    uint      `json:"EquipoID"`
-	HoraLlegada time.Time `json:"HoraLlegada"`
+	EstacionID   uint      `json:"EstacionID"`
+	EquipoID     uint      `json:"EquipoID"`
+	EquipoCodigo string    `json:"EquipoCodigo"`
+	HoraLlegada  time.Time `json:"HoraLlegada"`
 }

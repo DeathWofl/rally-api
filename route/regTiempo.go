@@ -19,6 +19,16 @@ func PostRegTiempo(c echo.Context) error {
 		panic(err)
 	}
 
+	// buscar equipo
+	user := models.Equipo{}
+	DB.Where(&models.Equipo{CodigoGrupo: Restiem.CodigoGrupo}).First(&user)
+	Restiem.EquipoID = user.ID
+	if user.ID == 0 {
+		return c.JSON(http.StatusUnauthorized, map[string]string{
+			"response": "Ese Codigo de Grupo no existe",
+		})
+	}
+
 	Restiem.HoraLlegada = time.Now()
 	DB.Create(&Restiem)
 	return c.JSON(http.StatusOK, Restiem)

@@ -12,7 +12,7 @@ import (
 func GetAllEquipos(c echo.Context) error {
 	DB := db.DBManager()
 	equipo := []models.Equipo{}
-	DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
+	DB.Find(&equipo)
 	DB.Find(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
@@ -23,10 +23,10 @@ func GetEquipo(c echo.Context) error {
 	id := c.Param("id")
 	equipo := models.Equipo{}
 	DB.First(&equipo, id)
+	DB.Find(&equipo.RegResps, equipo.ID)
 	if equipo.ID == 0 {
 		return c.String(http.StatusOK, "El Equipo no existe")
 	}
-	// DB.Preload("reg_resps").Preload("reg_tiempos").Find(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 

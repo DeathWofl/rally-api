@@ -29,5 +29,7 @@ func Migrate() {
 	// Create a admin user
 	user := models.Usuario{Nombre: "Admin", Username: "admin", Password: "admin"}
 	DB.Create(&user)
+	equip := models.Equipo{MatriculaE1: "2016-0001", MatriculaE2: "2016-0002", MatriculaE3: "2016-0003", ContraGrupo: "Pass123", CodigoGrupo: "123456789"}
+	DB.Create(&equip)
 
 }

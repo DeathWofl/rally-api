@@ -14,7 +14,7 @@ import (
 func GetAllQuestion(c echo.Context) error {
 	DB := db.DBManager()
 	question := []models.Pregunta{}
-	DB.Preload("respuesta").Preload("reg_regs").Find(&question)
+	DB.Find(&question)
 	return c.JSON(http.StatusOK, question)
 }
 

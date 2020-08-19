@@ -53,7 +53,8 @@ func LoginEstu(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, map[string]string{
-		"token": t,
+		"token":       t,
+		"CodigoGrupo": sear.CodigoGrupo,
 	})
 }
 

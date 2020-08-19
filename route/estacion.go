@@ -12,7 +12,7 @@ import (
 func GetAllEstacion(c echo.Context) error {
 	DB := db.DBManager()
 	estacion := []models.Estacion{}
-	DB.Preload("pregunta").Preload("reg_tiempos").Find(&estacion)
+	DB.Find(&estacion)
 	return c.JSON(http.StatusOK, estacion)
 }
 
@@ -22,10 +22,11 @@ func GetEstacion(c echo.Context) error {
 	id := c.Param("id")
 	estacion := models.Estacion{}
 	DB.First(&estacion, id)
+	DB.Find(&estacion.Preguntas, estacion.ID)
+	DB.Find(&estacion.RegTiempos, estacion.ID)
 	if estacion.ID == 0 {
 		return c.String(http.StatusOK, "La estacion no existe")
 	}
-	// DB.Preload("pregunta").Preload("reg_tiempos").First(&estacion, id)
 	return c.JSON(http.StatusOK, estacion)
 }
 

@@ -13,7 +13,8 @@ func GetRespuesta(c echo.Context) error {
 	DB := db.DBManager()
 	id := c.Param("id")
 	Resp := models.Respuesta{}
-	DB.Find(&Resp, id)
+	DB.First(&Resp, id)
+	DB.First(&Resp.Preg, Resp.PreguntaID)
 	return c.JSON(http.StatusOK, Resp)
 }
 
@@ -21,7 +22,7 @@ func GetRespuesta(c echo.Context) error {
 func GetAllRespuestas(c echo.Context) error {
 	DB := db.DBManager()
 	Resp := []models.Respuesta{}
-	DB.Preload("preguntas").Find(&Resp)
+	DB.Find(&Resp)
 	return c.JSON(http.StatusOK, Resp)
 }
 

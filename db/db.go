@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/DeathWofl/rally-api/configuration"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 )
@@ -15,11 +14,14 @@ var err error
 
 //Init Inicia la conexion con la base de datos
 func Init() *gorm.DB {
-	c := configuration.GetConfiguration()
 
+	userDB := "u7ngap3fewbbqahv"
+	userPassword := "5yhtxXIgpHtb1k6Ba06h"
+	DBHost := "by6b42vzghn5z3lwdaqg-mysql.services.clever-cloud.com"
+	DBName := "by6b42vzghn5z3lwdaqg"
 	// database string connection
 	// dsc := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", c.User, c.Password, c.Database)
-	dsc := fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local", c.User, c.Password, c.Database)
+	dsc := fmt.Sprintf("%s:%s@(%s)/%s?charset=utf8&parseTime=True&loc=Local", userDB, userPassword, DBHost, DBName)
 
 	DB, err = gorm.Open("mysql", dsc)
 	if err != nil {

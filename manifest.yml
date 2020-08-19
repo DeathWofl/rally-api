@@ -1,0 +1,6 @@
+---
+applications:
+- name: test-production
+  random-route: true
+  memory: 256M
+  buildpack: go_buildpack

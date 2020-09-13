@@ -89,7 +89,8 @@ func main() {
 	app.DELETE("/usuarios/:id", route.DeleteUser) // Probado
 
 	// Registro de respuestas
-	app.POST("/regrespuesta", route.PostRegRespuesta)   // Probado
+	app.POST("/regrespuesta", route.PostRegRespuesta) // Probado
+	app.POST("/regrespuesta/all", route.PostAllRegRespuesta)
 	app.GET("/regrespuesta", route.GetAllRegRespuesta)  // Probado
 	app.GET("/regrespuesta/:id", route.GetRegRespuesta) // Probado
 

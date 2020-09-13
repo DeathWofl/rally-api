@@ -21,9 +21,9 @@ func GetRespuesta(c echo.Context) error {
 //GetAllRespuestas retorna todas las respuestas existentes
 func GetAllRespuestas(c echo.Context) error {
 	DB := db.DBManager()
-	Resp := []models.Respuesta{}
-	DB.Find(&Resp)
-	return c.JSON(http.StatusOK, Resp)
+	resp := []models.Respuesta{}
+	DB.Find(&resp)
+	return c.JSON(http.StatusOK, resp)
 }
 
 //PutRespuesta actualizar una respuesta

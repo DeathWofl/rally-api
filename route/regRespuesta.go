@@ -20,6 +20,23 @@ func PostRegRespuesta(c echo.Context) error {
 	return c.JSON(http.StatusOK, Reg)
 }
 
+//PostAllRegRespuesta agregar registro de respuesta
+func PostAllRegRespuesta(c echo.Context) error {
+	DB := db.DBManager()
+
+	Reg := []models.RegResp{}
+
+	if err := c.Bind(&Reg); err != nil { // here unmarshal request body into p
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	for _, item := range Reg {
+		DB.Create(&item)
+	}
+
+	return c.NoContent(http.StatusOK)
+}
+
 //GetAllRegRespuesta retorna todas los registros de respuestas
 func GetAllRegRespuesta(c echo.Context) error {
 	DB := db.DBManager()

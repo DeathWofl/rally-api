@@ -13,7 +13,6 @@ func GetAllEquipos(c echo.Context) error {
 	DB := db.DBManager()
 	equipo := []models.Equipo{}
 	DB.Find(&equipo)
-	DB.Find(&equipo)
 	return c.JSON(http.StatusOK, equipo)
 }
 

@@ -99,6 +99,8 @@ func main() {
 	app.GET("/regtiempo", route.GetAllRegsTiempo) // Probado
 	app.GET("/regtiempo/:id", route.GetRegTiempo) // Probado
 
-	// Crear branch y que sea con sqlite
+	// Ganadores
+	app.GET("/ganadores", route.GetGanadores)
+
 	e.Logger.Fatal(e.Start(":1323"))
 }

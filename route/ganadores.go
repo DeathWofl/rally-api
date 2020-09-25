@@ -40,19 +40,3 @@ func GetGanadores(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, ganadores)
 }
-
-//GetEquipo Retorna equipo por ID
-func GetGanadores2(c echo.Context) error {
-	DB := db.DBManager()
-	ganadores := []models.Ganador{}
-
-	DB.Model(models.Equipo{}).
-		Select("equipos.id AS ID, TIMEDIFF(MAX(reg_tiempos.hora_llegada),MIN(reg_tiempos.hora_llegada)) AS Transcurso, AVG(reg_resps.calificacion) AS Puntaje").
-		Joins("INNER JOIN reg_tiempos ON equipos.id=reg_tiempos.equipo_id").
-		Joins("INNER JOIN reg_resps ON equipos.id=reg_resps.equipo_id").
-		Group("equipos.id").
-		Order("Puntaje DESC, Transcurso ASC").
-		Find(&ganadores)
-
-	return c.JSON(http.StatusOK, ganadores)
-}

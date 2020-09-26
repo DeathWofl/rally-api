@@ -4,5 +4,5 @@ package models
 type Ganador struct {
 	ID         uint
 	Transcurso string
-	Puntaje    Double
+	Puntaje    float32
 }

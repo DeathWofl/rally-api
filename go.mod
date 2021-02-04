@@ -9,4 +9,5 @@ require (
 	github.com/labstack/gommon v0.3.0
 	golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
 	gopkg.in/gormigrate.v1 v1.6.0
+	gorm.io/gorm v1.20.12
 )

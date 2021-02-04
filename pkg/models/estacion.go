@@ -13,8 +13,8 @@ type Estacion struct {
 
 // EstacionService metodos disponibles para Estacion
 type EstacionService interface {
-	Estacion(id uint) (*Equipo, error)
-	Equipos() (*[]Equipo, error)
+	Estacion(id uint) (*Estacion, error)
+	Estaciones() (*[]Estacion, error)
 	CreateEstacion(e *Estacion) (*Estacion, error)
 	UpdateEstacion(id uint, e *Estacion) (*Estacion, error)
 	DeleteEstacion(id uint) error

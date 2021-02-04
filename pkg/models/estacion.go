@@ -10,3 +10,12 @@ type Estacion struct {
 	Preguntas   []Pregunta
 	RegTiempos  []RegTiempo
 }
+
+// EstacionService metodos disponibles para Estacion
+type EstacionService interface {
+	Estacion(id uint) (*Equipo, error)
+	Equipos() (*[]Equipo, error)
+	CreateEstacion(e *Estacion) (*Estacion, error)
+	UpdateEstacion(id uint, e *Estacion) (*Estacion, error)
+	DeleteEstacion(id uint) error
+}

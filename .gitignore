@@ -2,3 +2,5 @@
 *.exe
 *.json
 *.tmp
+.Env
+Dockerfile

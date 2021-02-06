@@ -2,7 +2,7 @@ package mysql
 
 import (
 	"github.com/DeathWofl/rally-api/pkg/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // PuntuacionService implementado metodos

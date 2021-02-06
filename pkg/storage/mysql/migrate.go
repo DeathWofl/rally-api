@@ -2,26 +2,42 @@ package mysql
 
 import (
 	"github.com/DeathWofl/rally-api/pkg/models"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 //Migrate migracion a la base de datos
 func Migrate(DB *gorm.DB) {
-	DB.LogMode(true)
-
 	//Las borras en caso de que existan
-	DB.DropTableIfExists(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
+	DB.Migrator().DropTable(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
 
 	//Crea las tablas
-	DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Equipo{}, &models.Estacion{}, &models.Respuesta{}, &models.Pregunta{}, &models.Usuario{}, &models.RegResp{}, &models.RegTiempo{})
+	DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Equipo{}, &models.Estacion{}, &models.Usuario{}, &models.Pregunta{})
 
-	//Reaciones
-	DB.Model(&models.Pregunta{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
-	DB.Model(&models.RegTiempo{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
-	DB.Model(&models.RegResp{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
-	DB.Model(&models.RegTiempo{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
-	DB.Model(&models.RegResp{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
-	DB.Model(&models.Respuesta{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
+	//Relacion
+	// DB.Model(&models.Pregunta{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Estacion{}, "pregunta")
+	DB.Migrator().CreateConstraint(&models.Estacion{}, "fk_estaciones_preguntas")
+
+	DB.AutoMigrate(&models.Respuesta{})
+	//Relacion
+	// DB.Model(&models.Respuesta{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Pregunta{}, "Respuesta")
+	DB.Migrator().CreateConstraint(&models.Pregunta{}, "fk_pregunta_respuestas")
+
+	DB.AutoMigrate(&models.RegResp{}, &models.RegTiempo{})
+
+	// DB.Model(&models.RegTiempo{}).AddForeignKey("estacion_id", "estacions(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Estacion{}, "RegTiempos")
+	DB.Migrator().CreateConstraint(&models.Estacion{}, "fk_estaciones_reg_tiempos")
+	// DB.Model(&models.RegResp{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Equipo{}, "RegRespuestas")
+	DB.Migrator().CreateConstraint(&models.Equipo{}, "fk_equipos_reg_respuestas")
+	// DB.Model(&models.RegTiempo{}).AddForeignKey("equipo_id", "equipos(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Equipo{}, "RegTiempos")
+	DB.Migrator().CreateConstraint(&models.Equipo{}, "fk_equipos_reg_tiempos")
+	// DB.Model(&models.RegResp{}).AddForeignKey("pregunta_id", "pregunta(id)", "Cascade", "Cascade")
+	DB.Migrator().CreateConstraint(&models.Pregunta{}, "RegRespuestas")
+	DB.Migrator().CreateConstraint(&models.Pregunta{}, "fk_pregunta_reg_respuesta")
 
 	// Create a admin user
 	user := models.Usuario{Nombre: "Admin", Username: "admin", Password: "admin"}

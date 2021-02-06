@@ -3,29 +3,57 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 
-	"github.com/DeathWofl/rally-api/db"
-	"github.com/DeathWofl/rally-api/migration"
-	"github.com/DeathWofl/rally-api/route"
+	"github.com/DeathWofl/rally-api/pkg/handler"
+	storage "github.com/DeathWofl/rally-api/pkg/storage/mysql"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
-	db.Init()
-	defer db.DB.Close()
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	User := os.Getenv("DB_USER")
+	Password := os.Getenv("DB_PASSWORD")
+	Port := os.Getenv("DB_PORT")
+	Host := os.Getenv("DB_HOST")
+	Name := os.Getenv("DB_NAME")
+
+	dsc := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", User, Password, Host, Port, Name)
+	DB, err := gorm.Open(mysql.Open(dsc), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 
 	var migrate string
-
 	flag.StringVar(&migrate, "migrate", "no", "Genera la migracion de la base de datos.")
-
 	flag.Parse()
 
 	if migrate == "yes" {
 		fmt.Println("Comenzo la Migracion...")
-		migration.Migrate()
+		storage.Migrate(DB)
 		fmt.Println("Termino la Migracion...")
+	}
+
+	service := &handler.Service{
+		EquipoService:     &storage.EquipoService{DB},
+		EstacionService:   &storage.EstacionService{DB: DB},
+		PreguntaService:   &storage.PreguntaService{DB},
+		PuntuacionService: &storage.PuntuacionService{DB},
+		RegRespService:    &storage.RegRespService{DB},
+		RegTiempoService:  &storage.RegTiempoService{DB},
+		RespuestaService:  &storage.RespuestaService{DB},
+		UsuarioService:    &storage.UsuarioService{DB},
 	}
 
 	e := echo.New()
@@ -41,66 +69,66 @@ func main() {
 	e.Use(middleware.Recover())
 
 	// Rutas sin authorizacion
-	p.POST("/loginalumnos", route.LoginEstu)  // probado
-	p.POST("/loginmaestros", route.LoginUser) // Probado
+	p.POST("/loginalumnos", service.LoginEstu)  // probado
+	p.POST("/loginmaestros", service.LoginUser) // Probado
 
 	app := p.Group("/app")
 
 	config := middleware.JWTConfig{
-		Claims:     &route.JWTCustomClaim{},
+		Claims:     &handler.JWTCustomClaim{},
 		SigningKey: ([]byte("itesarally")),
 	}
 	app.Use(middleware.JWTWithConfig(config))
 
 	//// Authorization
 	//Equipos
-	app.GET("/equipo", route.GetAllEquipos)       // Probado
-	app.GET("/equipo/:id", route.GetEquipo)       // Probado
-	app.POST("/equipo", route.PostEquipo)         // Probado
-	app.PUT("/equipo/:id", route.PutEquipo)       // Probado
-	app.DELETE("/equipo/:id", route.DeleteEquipo) // Probado
+	app.GET("/equipo", service.GetAllEquipos)       // Probado
+	app.GET("/equipo/:id", service.GetEquipo)       // Probado
+	app.POST("/equipo", service.PostEquipo)         // Probado
+	app.PUT("/equipo/:id", service.PutEquipo)       // Probado
+	app.DELETE("/equipo/:id", service.DeleteEquipo) // Probado
 
 	//Estaciones
-	app.POST("/estacion", route.PostEstacion)         // Probado
-	app.GET("/estacion", route.GetAllEstacion)        // Probado
-	app.GET("/estacion/:id", route.GetEstacion)       // Probado
-	app.PUT("/estacion/:id", route.PutEstacion)       // Probado
-	app.DELETE("/estacion/:id", route.DeleteEstacion) // Probado
+	app.POST("/estacion", service.PostEstacion)         // Probado
+	app.GET("/estacion", service.GetAllEstacion)        // Probado
+	app.GET("/estacion/:id", service.GetEstacion)       // Probado
+	app.PUT("/estacion/:id", service.PutEstacion)       // Probado
+	app.DELETE("/estacion/:id", service.DeleteEstacion) // Probado
 
 	//Respuesta
-	app.GET("/respuestas/:id", route.GetRespuesta)      // Probado
-	app.GET("/respuestas", route.GetAllRespuestas)      // Probado
-	app.POST("/respuestas", route.PostRespuesta)        // Probado
-	app.PUT("/respuestas/:id", route.PutRespuesta)      //Probado
-	app.DELETE("/respuestas/:id", route.DeleteEstacion) // Probado
+	app.GET("/respuestas/:id", service.GetRespuesta)      // Probado
+	app.GET("/respuestas", service.GetAllRespuestas)      // Probado
+	app.POST("/respuestas", service.PostRespuesta)        // Probado
+	app.PUT("/respuestas/:id", service.PutRespuesta)      //Probado
+	app.DELETE("/respuestas/:id", service.DeleteEstacion) // Probado
 
 	// Preguntas
-	app.GET("/preguntas", route.GetAllQuestion)        // Probado
-	app.GET("/preguntas/:id", route.GetQuestion)       // Probado
-	app.POST("/preguntas", route.PostQuestion)         // Probado
-	app.PUT("/preguntas/:id", route.PutQuestion)       // Probado
-	app.DELETE("/preguntas/:id", route.DeleteQuestion) // Probado
+	app.GET("/preguntas", service.GetAllQuestion)        // Probado
+	app.GET("/preguntas/:id", service.GetQuestion)       // Probado
+	app.POST("/preguntas", service.PostQuestion)         // Probado
+	app.PUT("/preguntas/:id", service.PutQuestion)       // Probado
+	app.DELETE("/preguntas/:id", service.DeleteQuestion) // Probado
 
 	// Usuarios
-	app.GET("/usuarios", route.GetAllUsers)       // Probado
-	app.GET("/usuarios/:id", route.GetUser)       // Probado
-	app.POST("/usuarios", route.PostUser)         // Probado
-	app.PUT("/usuarios/:id", route.PutUser)       // Probado
-	app.DELETE("/usuarios/:id", route.DeleteUser) // Probado
+	app.GET("/usuarios", service.GetAllUsers)       // Probado
+	app.GET("/usuarios/:id", service.GetUser)       // Probado
+	app.POST("/usuarios", service.PostUser)         // Probado
+	app.PUT("/usuarios/:id", service.PutUser)       // Probado
+	app.DELETE("/usuarios/:id", service.DeleteUser) // Probado
 
 	// Registro de respuestas
-	app.POST("/regrespuesta", route.PostRegRespuesta) // Probado
-	app.POST("/regrespuesta/all", route.PostAllRegRespuesta)
-	app.GET("/regrespuesta", route.GetAllRegRespuesta)  // Probado
-	app.GET("/regrespuesta/:id", route.GetRegRespuesta) // Probado
+	app.POST("/regrespuesta", service.PostRegRespuesta) // Probado
+	app.POST("/regrespuesta/all", service.PostAllRegRespuesta)
+	app.GET("/regrespuesta", service.GetAllRegRespuesta)  // Probado
+	app.GET("/regrespuesta/:id", service.GetRegRespuesta) // Probado
 
 	//Registro de tiempos
-	app.POST("/regtiempo", route.PostRegTiempo)   // Probado
-	app.GET("/regtiempo", route.GetAllRegsTiempo) // Probado
-	app.GET("/regtiempo/:id", route.GetRegTiempo) // Probado
+	app.POST("/regtiempo", service.PostRegTiempo)   // Probado
+	app.GET("/regtiempo", service.GetAllRegsTiempo) // Probado
+	app.GET("/regtiempo/:id", service.GetRegTiempo) // Probado
 
 	// Ganadores
-	app.GET("/ganadores", route.GetGanadores)
+	app.GET("/ganadores", service.GetPuntuaciones)
 
 	e.Logger.Fatal(e.Start(":1323"))
 }

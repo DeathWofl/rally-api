@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// EstacionService implementando metodos
 type EstacionService struct {
 	DB *gorm.DB
 }
@@ -16,8 +17,8 @@ func (s *EstacionService) Estacion(id uint) (*models.Estacion, error) {
 	return &estacion, nil
 }
 
-// Equipos retorna todos los equipos en la BD
-func (s *EstacionService) Equipos() (*[]models.Estacion, error) {
+// Estaciones retorna todos los equipos en la BD
+func (s *EstacionService) Estaciones() (*[]models.Estacion, error) {
 	var estaciones []models.Estacion
 	s.DB.Find(&estaciones)
 	return &estaciones, nil

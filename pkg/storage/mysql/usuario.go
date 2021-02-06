@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// UsuarioService implementando metodos
 type UsuarioService struct {
 	DB *gorm.DB
 }

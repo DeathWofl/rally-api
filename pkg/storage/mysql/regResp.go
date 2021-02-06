@@ -1,3 +1,11 @@
+package mysql
+
+import (
+	"github.com/DeathWofl/rally-api/pkg/models"
+	"gorm.io/gorm"
+)
+
+// RegRespService implementando metodos
 type RegRespService struct {
 	DB *gorm.DB
 }

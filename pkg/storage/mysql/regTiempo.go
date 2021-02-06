@@ -1,3 +1,11 @@
+package mysql
+
+import (
+	"github.com/DeathWofl/rally-api/pkg/models"
+	"gorm.io/gorm"
+)
+
+// RegTiempoService implementando metodos
 type RegTiempoService struct {
 	DB *gorm.DB
 }

@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// PreguntaService implementando metodos
 type PreguntaService struct {
 	DB *gorm.DB
 }

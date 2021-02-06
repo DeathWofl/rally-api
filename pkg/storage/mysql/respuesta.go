@@ -1,3 +1,11 @@
+package mysql
+
+import (
+	"github.com/DeathWofl/rally-api/pkg/models"
+	"gorm.io/gorm"
+)
+
+// RespuestaService implementando metodos
 type RespuestaService struct {
 	DB *gorm.DB
 }

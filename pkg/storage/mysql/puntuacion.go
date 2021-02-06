@@ -5,10 +5,13 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// PuntuacionService implementado metodos
 type PuntuacionService struct {
 	DB *gorm.DB
 }
 
+// Puntuaciones retorna todas las puntuaciones de los equipos,
+// ordenados por puntuacion y tiempo durado
 func (s *PuntuacionService) Puntuaciones() (*[]models.Puntuacion, error) {
 	Puntuaciones := []models.Puntuacion{}
 

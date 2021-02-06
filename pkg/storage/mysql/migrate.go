@@ -1,15 +1,12 @@
-package migration
+package mysql
 
 import (
-	"github.com/DeathWofl/rally-api/db"
-	"github.com/DeathWofl/rally-api/models"
+	"github.com/DeathWofl/rally-api/pkg/models"
+	"github.com/jinzhu/gorm"
 )
 
 //Migrate migracion a la base de datos
-func Migrate() {
-
-	DB := db.DBManager()
-
+func Migrate(DB *gorm.DB) {
 	DB.LogMode(true)
 
 	//Las borras en caso de que existan

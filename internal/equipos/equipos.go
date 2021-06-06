@@ -1,8 +1,10 @@
-// Package models define cada entidad que existe en la app
-// tambien los metodos correspondientes a cada entidad
-package models
+package equipos
 
-import "github.com/jinzhu/gorm"
+import (
+	"github.com/jinzhu/gorm"
+	regresp "github.com/spinales/rally-api/internal/registro_respuestas"
+	regtieps "github.com/spinales/rally-api/internal/registro_tiempos"
+)
 
 // Equipo representa cada equipo del rally
 type Equipo struct {
@@ -12,8 +14,8 @@ type Equipo struct {
 	MatriculaE3 string `json:"MatriculaE3" gorm:"not null;type:varchar(15);"`
 	CodigoGrupo string `json:"CodigoGrupo" gorm:"not null;type:varchar(100);" sql:"index"`
 	ContraGrupo string `json:"ContraGrupo" gorm:"not null;type:varchar(100);"`
-	RegResps    []RegResp
-	RegTiempos  []RegTiempo
+	RegResps    []regresp.RegResp
+	RegTiempos  []regtieps.RegTiempo
 }
 
 // EquipoService metodos disponibles para Equipo

@@ -1,4 +1,4 @@
-module github.com/DeathWofl/rally-api
+module github.com/spinales/rally-api
 
 go 1.13
 

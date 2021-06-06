@@ -3,32 +3,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
-	"os"
 
-	"github.com/DeathWofl/rally-api/pkg/handler"
-	storage "github.com/DeathWofl/rally-api/pkg/storage/mysql"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	intern "github.com/spinales/internal/configs"
+	"github.com/spinales/rally-api/pkg/handler"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	User := os.Getenv("DB_USER")
-	Password := os.Getenv("DB_PASSWORD")
-	Port := os.Getenv("DB_PORT")
-	Host := os.Getenv("DB_HOST")
-	Name := os.Getenv("DB_NAME")
-
-	dsc := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local", User, Password, Host, Port, Name)
+	dsc := intern.ConnectionString()
 	DB, err := gorm.Open(mysql.Open(dsc), &gorm.Config{})
 	if err != nil {
 		panic(err)

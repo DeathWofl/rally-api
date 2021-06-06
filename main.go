@@ -17,7 +17,6 @@ import (
 )
 
 func main() {
-
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
@@ -59,7 +58,7 @@ func main() {
 	e := echo.New()
 	p := e.Group("/api")
 
-	//CORS
+	// CORS
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodHead, http.MethodPut, http.MethodPatch, http.MethodPost, http.MethodDelete},
@@ -88,18 +87,18 @@ func main() {
 	app.PUT("/equipo/:id", service.PutEquipo)       // Probado
 	app.DELETE("/equipo/:id", service.DeleteEquipo) // Probado
 
-	//Estaciones
+	// Estaciones
 	app.POST("/estacion", service.PostEstacion)         // Probado
 	app.GET("/estacion", service.GetAllEstacion)        // Probado
 	app.GET("/estacion/:id", service.GetEstacion)       // Probado
 	app.PUT("/estacion/:id", service.PutEstacion)       // Probado
 	app.DELETE("/estacion/:id", service.DeleteEstacion) // Probado
 
-	//Respuesta
+	// Respuesta
 	app.GET("/respuestas/:id", service.GetRespuesta)      // Probado
 	app.GET("/respuestas", service.GetAllRespuestas)      // Probado
 	app.POST("/respuestas", service.PostRespuesta)        // Probado
-	app.PUT("/respuestas/:id", service.PutRespuesta)      //Probado
+	app.PUT("/respuestas/:id", service.PutRespuesta)      // Probado
 	app.DELETE("/respuestas/:id", service.DeleteEstacion) // Probado
 
 	// Preguntas
@@ -122,7 +121,7 @@ func main() {
 	app.GET("/regrespuesta", service.GetAllRegRespuesta)  // Probado
 	app.GET("/regrespuesta/:id", service.GetRegRespuesta) // Probado
 
-	//Registro de tiempos
+	// Registro de tiempos
 	app.POST("/regtiempo", service.PostRegTiempo)   // Probado
 	app.GET("/regtiempo", service.GetAllRegsTiempo) // Probado
 	app.GET("/regtiempo/:id", service.GetRegTiempo) // Probado

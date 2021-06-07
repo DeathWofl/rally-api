@@ -1,9 +1,10 @@
 package equipos
 
 import (
-	"github.com/jinzhu/gorm"
+	"github.com/spinales/rally-api/internal/platform/logger"
 	regresp "github.com/spinales/rally-api/internal/registro_respuestas"
 	regtieps "github.com/spinales/rally-api/internal/registro_tiempos"
+	"gorm.io/gorm"
 )
 
 // Equipo representa cada equipo del rally
@@ -18,11 +19,64 @@ type Equipo struct {
 	RegTiempos  []regtieps.RegTiempo
 }
 
-// EquipoService metodos disponibles para Equipo
-type EquipoService interface {
-	Equipo(id uint) (*Equipo, error)
-	Equipos() (*[]Equipo, error)
-	CreateEquipo(u *Equipo) (*Equipo, error)
-	UpdateEquipo(id uint, u *Equipo) (*Equipo, error)
-	DeleteEquipo(id uint) error
+type Equipos struct {
+	logHandler logger.Logger
+	store      store
+}
+
+func (es *Equipos) EquipoPorID(id uint) (*Equipo, error) {
+	e, err := es.store.ReadByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return e, nil
+}
+
+func (es *Equipos) TodosEquipos() (*[]Equipo, error) {
+	e, err := es.store.All()
+	if err != nil {
+		return nil, err
+	}
+
+	return e, nil
+}
+
+func (es *Equipos) CrearEquipo(e *Equipo) (*Equipo, error) {
+	e, err := es.store.Create(e)
+	if err != nil {
+		return nil, err
+	}
+
+	return e, nil
+}
+
+func (es *Equipos) ActualizarEquipo(id uint, e *Equipo) (*Equipo, error) {
+	e, err := es.store.Update(id, e)
+	if err != nil {
+		return nil, err
+	}
+
+	return e, nil
+}
+
+func (es *Equipos) EliminarEquipo(id uint) error {
+	err := es.store.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewService(l logger.Logger, db *gorm.DB) (*Equipos, error) {
+	ustore, err := newStore(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return &Equipos{
+		logHandler: l,
+		store:      ustore,
+	}, nil
 }

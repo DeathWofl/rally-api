@@ -3,6 +3,7 @@ package regtieps
 import (
 	"time"
 
+	"github.com/spinales/rally-api/internal/platform/logger"
 	"gorm.io/gorm"
 )
 
@@ -14,4 +15,66 @@ type RegTiempo struct {
 	EquipoID    uint      `json:"EquipoID"`
 	CodigoGrupo string    `json:"CodigoGrupo" gorm:"not null;type:varchar(100);"`
 	HoraLlegada time.Time `json:"HoraLlegada"`
+}
+
+type RegTiempos struct {
+	logHandler logger.Logger
+	store      store
+}
+
+func (rts *RegTiempos) RegTiempoPorID(id uint) (*RegTiempo, error) {
+	rt, err := rts.store.ReadByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	return rt, nil
+}
+
+func (rts *RegTiempos) RegTiempos() (*[]RegTiempo, error) {
+	rt, err := rts.store.All()
+	if err != nil {
+		return nil, err
+	}
+
+	return rt, nil
+}
+
+func (rts *RegTiempos) CreateRegTiempo(r *RegTiempo) (*RegTiempo, error) {
+	rt, err := rts.store.Create(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return rt, nil
+}
+
+func (rts *RegTiempos) UpdateRegTiempo(id uint, r *RegTiempo) (*RegTiempo, error) {
+	rt, err := rts.store.Update(id, r)
+	if err != nil {
+		return nil, err
+	}
+
+	return rt, nil
+}
+
+func (rts *RegTiempos) DeleteRegTiempo(id uint) error {
+	err := rts.store.Delete(id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func NewService(l logger.Logger, db *gorm.DB) (*RegTiempos, error) {
+	regstore, err := newStore(db)
+	if err != nil {
+		return nil, err
+	}
+
+	return &RegTiempos{
+		logHandler: l,
+		store:      regstore,
+	}, nil
 }

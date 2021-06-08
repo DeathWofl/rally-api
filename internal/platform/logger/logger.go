@@ -21,23 +21,23 @@ type LogHandler struct {
 }
 
 func (lh *LogHandler) Info(message string, fields ...zap.Field) {
-	lh.log.Info(message, fields...)
+	lh.Info(message, fields...)
 }
 
 func (lh *LogHandler) Warn(message string, fields ...zap.Field) {
-	lh.log.Warn(message, fields...)
+	lh.Warn(message, fields...)
 }
 
 func (lh *LogHandler) Fatal(message string, fields ...zap.Field) {
-	lh.log.Fatal(message, fields...)
+	lh.Fatal(message, fields...)
 }
 
 func (lh *LogHandler) Debug(message string, fields ...zap.Field) {
-	lh.log.Debug(message, fields...)
+	lh.Debug(message, fields...)
 }
 
 func (lh *LogHandler) Error(message string, fields ...zap.Field) {
-	lh.log.Error(message, fields...)
+	lh.Error(message, fields...)
 }
 
 // New returns a new instance of LogHandler

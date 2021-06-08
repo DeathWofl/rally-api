@@ -57,7 +57,7 @@ func (prs *Preguntas) ActualizarPregunta(id uint, p *Pregunta) (*Pregunta, error
 	return p, nil
 }
 
-func (prs *Preguntas) Delete(id uint) error {
+func (prs *Preguntas) EliminarPregunta(id uint) error {
 	err := prs.store.Delete(id)
 	if err != nil {
 		return err

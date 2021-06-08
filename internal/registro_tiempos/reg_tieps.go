@@ -31,7 +31,7 @@ func (rts *RegTiempos) RegTiempoPorID(id uint) (*RegTiempo, error) {
 	return rt, nil
 }
 
-func (rts *RegTiempos) RegTiempos() (*[]RegTiempo, error) {
+func (rts *RegTiempos) TodosRegTiempos() (*[]RegTiempo, error) {
 	rt, err := rts.store.All()
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (rts *RegTiempos) RegTiempos() (*[]RegTiempo, error) {
 	return rt, nil
 }
 
-func (rts *RegTiempos) CreateRegTiempo(r *RegTiempo) (*RegTiempo, error) {
+func (rts *RegTiempos) CrearRegTiempo(r *RegTiempo) (*RegTiempo, error) {
 	rt, err := rts.store.Create(r)
 	if err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func (rts *RegTiempos) CreateRegTiempo(r *RegTiempo) (*RegTiempo, error) {
 	return rt, nil
 }
 
-func (rts *RegTiempos) UpdateRegTiempo(id uint, r *RegTiempo) (*RegTiempo, error) {
+func (rts *RegTiempos) ActualizarRegTiempo(id uint, r *RegTiempo) (*RegTiempo, error) {
 	rt, err := rts.store.Update(id, r)
 	if err != nil {
 		return nil, err
@@ -58,7 +58,7 @@ func (rts *RegTiempos) UpdateRegTiempo(id uint, r *RegTiempo) (*RegTiempo, error
 	return rt, nil
 }
 
-func (rts *RegTiempos) DeleteRegTiempo(id uint) error {
+func (rts *RegTiempos) EliminarRegTiempo(id uint) error {
 	err := rts.store.Delete(id)
 	if err != nil {
 		return err

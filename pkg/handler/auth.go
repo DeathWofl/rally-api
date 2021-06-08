@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/DeathWofl/rally-api/pkg/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo"
+	"github.com/spinales/rally-api/pkg/models"
 )
 
 // JWTCustomClaim datos encritados en el JWT
@@ -17,9 +17,8 @@ type JWTCustomClaim struct {
 	jwt.StandardClaims
 }
 
-//LoginEstu ruta para la authentificacion de los estudiantes
+// LoginEstu ruta para la authentificacion de los estudiantes
 func (s *Service) LoginEstu(c echo.Context) error {
-
 	result := models.Equipo{}
 	err := c.Bind(&result)
 	if err != nil {
@@ -62,7 +61,7 @@ func (s *Service) LoginEstu(c echo.Context) error {
 	})
 }
 
-//LoginUser logearse maestros
+// LoginUser logearse maestros
 func (s *Service) LoginUser(c echo.Context) error {
 	// datos enviados, parseando json
 	parse := models.Usuario{}
